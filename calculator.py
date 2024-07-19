@@ -2,22 +2,23 @@ import tkinter as tk
 import math
 
 def press(event):
-    current = display.get()
+    current = input_display.get()
     text = event.widget.cget("text")
 
     if text == 'C':
-        display.delete(0, tk.END)
+        input_display.delete(0, tk.END)
+        result_display.delete(0, tk.END)
     elif text == '=':
         try:
             result = eval(current)
-            display.delete(0, tk.END)
-            display.insert(tk.END, result)
+            result_display.delete(0, tk.END)
+            result_display.insert(tk.END, result)
         except ZeroDivisionError:
-            display.delete(0, tk.END)
-            display.insert(tk.END, "Error: Division by zero")
+            result_display.delete(0, tk.END)
+            result_display.insert(tk.END, "Error: Division by zero")
         except Exception as e:
-            display.delete(0, tk.END)
-            display.insert(tk.END, f"Error: {str(e)}")
+            result_display.delete(0, tk.END)
+            result_display.insert(tk.END, f"Error: {str(e)}")
     elif text in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '%']:
         try:
             if text == 'sin':
@@ -33,34 +34,40 @@ def press(event):
             elif text == 'sqrt':
                 result = math.sqrt(float(current))
             elif text == '^':
-                display.insert(tk.END, '**')
+                input_display.insert(tk.END, '**')
                 return
             elif text == '%':
                 result = float(current) / 100
-            display.delete(0, tk.END)
-            display.insert(tk.END, result)
+            result_display.delete(0, tk.END)
+            result_display.insert(tk.END, result)
         except Exception as e:
-            display.delete(0, tk.END)
-            display.insert(tk.END, f"Error: {str(e)}")
+            result_display.delete(0, tk.END)
+            result_display.insert(tk.END, f"Error: {str(e)}")
     else:
-        display.insert(tk.END, text)
+        input_display.insert(tk.END, text)
 
 screen = tk.Tk()
 screen.title("Scientific Calculator")
 
-display = tk.Entry(screen, font=("Arial", 20), justify="right")
-display.pack(fill=tk.X, padx=20, pady=10, ipadx=5, ipady=10)
+# Entry widget for input display
+input_display = tk.Entry(screen, font=("Arial", 20), justify="right")
+input_display.pack(fill=tk.X, padx=20, pady=(20, 5), ipadx=5, ipady=10)
+
+# Entry widget for result display
+result_display = tk.Entry(screen, font=("Arial", 20), justify="right")
+result_display.pack(fill=tk.X, padx=20, pady=(5, 20), ipadx=5, ipady=10)
 
 button_frame = tk.Frame(screen)
 button_frame.pack()
 
 button_key = [
+    "sin", "cos", "tan", "sqrt",
+    "log", " ln ", " ^ ", " % ",
     "7", "8", "9", "*",
     "4", "5", "6", "+",
     "1", "2", "3", "-",
-    "C", "0", "=", "/",
-    "sin", "cos", "tan", "sqrt",
-    "log", "ln", "^", "%"
+    "C", "0", "=", "/"
+
 ]
 
 i = 0
